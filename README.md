@@ -1,31 +1,36 @@
 # BrainMinder - Backend for Frontend
  
-## Estrutura de Pastas do Projeto
+## Project Folder Structure
 
-- **classes**: Contém a definição de entidades (classes), que representam os objetos principais utilizados na aplicação.
-- **controllers**: Responsável por gerenciar os endpoints da aplicação. Aqui são definidas as funções que lidam com as requisições HTTP, chamando as implementações e retornando as respostas adequadas.
-- **implementations**: Contém as implementações de cada endpoint, além de toda a lógica de negócio associada.
-- **models**: Inclui os schemas do banco de dados (MongoDB) definidos com Mongoose.
-- **plugins**: Configurações adicionais e plugins utilizados no MongoDB, como funcionalidades de encriptação e extensões do Mongoose.
-- **routes**: Onde as rotas da API são definidas. Essas rotas conectam os endpoints aos controllers adequados.
-- **services**: Serviços auxiliares, como autenticação, envio de emails, e outras funcionalidades isoladas da lógica principal da aplicação.
-- **validators**: Contém as validações de dados das requisições, garantindo que os inputs dos usuários estejam corretos antes de serem processados.
-- **commons**: Interfaces, corpos de requisições e validadores que são compartilhados entre o backend e o frontend. Esta pasta centraliza todos os recursos reutilizáveis para evitar duplicidade de código.
+- Classes: Contains the definition of entities (classes), which represent the main objects used in the application.
+- Controllers: Responsible for managing the application's endpoints. This is where the functions that handle HTTP requests are defined, calling the implementations and returning the appropriate responses.
+- Implementations: Contains the implementations of each endpoint, as well as all the associated business logic.
+- **models**: Includes the database schemas (MongoDB) defined with Mongoose.
+- **plugins**: Additional configurations and plugins used in MongoDB, such as encryption functionalities and Mongoose extensions.
+- **routes**: Where the API routes are defined. These routes connect the endpoints to the appropriate controllers.
+- **services**: Auxiliary services, such as authentication, sending emails, and other functionalities isolated from the application's main logic.
+- **validators**: Contains data validations for requests, ensuring that user inputs are correct before they are processed.
+- **commons**: Interfaces, request bodies and validators that are shared between the backend and the frontend. This folder centralizes all reusable resources to avoid code duplication.
 
-## Tecnologias Utilizadas
 
-- **axios**: ^1.4.0 - Cliente HTTP para fazer requisições externas.
-- **bcrypt**: ^5.1.1 - Biblioteca de hash para criptografia de senhas.
-- **bcryptjs**: ^2.4.3 - Alternativa ao bcrypt, usada para criptografia de senhas.
-- **body-parser**: ^1.20.0 - Middleware para lidar com o corpo de requisições HTTP.
-- **celebrate**: ^15.0.3 - Validação de entradas da API com base no Joi.
-- **cors**: ^2.8.5 - Middleware para permitir requisições de diferentes origens (Cross-Origin Resource Sharing).
-- **dot-object**: ^2.1.4 - Ferramenta para manipular objetos JSON, útil para transformar e mapear dados.
-- **express**: ^4.17.3 - Framework web para construir APIs rápidas e robustas em Node.js.
-- **jsonwebtoken**: ^9.0.2 - Para geração e validação de tokens JWT (JSON Web Tokens).
-- **moment**: ^2.30.1 - Biblioteca para manipulação e formatação de datas.
-- **mongoose**: ^6.2.9 - ORM para modelagem de dados e integração com MongoDB.
-- **node-schedule**: ^2.1.1 - Agendamento de tarefas no Node.js (ex: execução de tarefas periódicas).
-- **nodemailer**: ^6.8.0 - Biblioteca para envio de emails.
-- **zod**: ^3.22.4 - Biblioteca para validação de dados com segurança tipada.
-- **mongodb-client-encryption**: ^6.1.0 - Ferramenta para criptografia de dados no MongoDB.
+## Technologies Used
+
+- **axios**: ^1.4.0 - HTTP client for making external requests.
+- **bcrypt**: ^5.1.1 - Hash library for password encryption.
+- **bcryptjs**: ^2.4.3 - Alternative to bcrypt, used for password encryption.
+- **body-parser**: ^1.20.0 - Middleware for handling the body of HTTP requests.
+- **celebrate**: ^15.0.3 - Validation of API entries based on Joi.
+- **cors**: ^2.8.5 - Middleware to allow requests from different sources (Cross-Origin Resource Sharing).
+- **dot-object**: ^2.1.4 - Tool for manipulating JSON objects, useful for transforming and mapping data.
+- **express**: ^4.17.3 - Web framework for building fast and robust APIs in Node.js.
+- **jsonwebtoken**: ^9.0.2 - For generating and validating JWT tokens (JSON Web Tokens).
+- **moment**: ^2.30.1 - Library for manipulating and formatting dates.
+- **mongoose**: ^6.2.9 - ORM for data modeling and integration with MongoDB.
+- **node-schedule**: ^2.1.1 - Scheduling tasks in Node.js (e.g. running periodic tasks).
+- **nodemailer**: ^6.8.0 - Library for sending emails.
+- **zod**: ^3.22.4 - Library for data validation with typed security.
+- **mongodb-client-encryption**: ^6.1.0 - Tool for data encryption in MongoDB.
+
+
+## Notes
+- Different repositories will be used for each part of the project: Front-end, Back for Front and Front for AI.
