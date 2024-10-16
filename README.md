@@ -1,4 +1,4 @@
-# BrainMinder
+# BrainMinder - Backend for Frontend
 
 ## Estrutura de Pastas do Projeto
 
