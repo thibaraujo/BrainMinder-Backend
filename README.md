@@ -1,5 +1,5 @@
 # BrainMinder - Backend for Frontend
-
+ 
 ## Estrutura de Pastas do Projeto
 
 - **classes**: Contém a definição de entidades (classes), que representam os objetos principais utilizados na aplicação.
