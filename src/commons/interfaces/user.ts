@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { IObjectRaw } from './base';
 
 export enum UserType {
