@@ -1,7 +1,4 @@
-import mongoose from "mongoose";
-import { IUser } from "./user";
 import { IObjectRaw } from "./base";
-import { User } from "../../classes/user";
 
 export type IDocumentRaw = {
   name: string;
