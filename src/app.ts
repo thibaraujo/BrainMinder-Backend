@@ -7,6 +7,12 @@ import { setupSchedule } from './services/scheduler';
 import { celebrateErrorHandler } from './validators/errors';
 import { errorHandler } from './services/errorHandler';
 import database from './services/database';
+import { User } from './classes/user';
+import { Document } from './classes/document';
+
+import { UserType } from './commons/interfaces/user';
+import { UserModel } from './models/user';
+import { DocumentModel } from './models/document';
 
 //* EXPRESS
 const app: express.Express = express();
@@ -62,5 +68,24 @@ setupSchedule();
 //* CELEBRATE VALIDATION
 app.use(celebrateErrorHandler);
 app.use(errorHandler);
+
+setTimeout(async () => {
+  database.connect()
+  .then(() => {
+    console.log('Database connected');
+  })
+
+  // const user = new User({
+  //   firstName: 'Admin',
+  //   lastName: 'Admin',
+  //   cpf: '12345678901',
+  //   type: UserType.ADMIN,
+  //   email: 'thiagobatistaaraujo06@gmail.com',
+  //   password: "123",
+  // });
+
+  // await UserModel.create(user);
+
+} , 1000);
 
 export default app;
