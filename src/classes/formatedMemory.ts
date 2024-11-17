@@ -6,6 +6,7 @@ export class FormatedMemory extends ObjectRaw implements IFormatedMemory {
   title: string;
   sumary: string;
   context: string;
+  text: string;
 
   constructor(formatedMemory: IFormatedMemory) {
     super(formatedMemory);
@@ -13,5 +14,6 @@ export class FormatedMemory extends ObjectRaw implements IFormatedMemory {
     this.title = formatedMemory.title;
     this.sumary = formatedMemory.sumary;
     this.context = formatedMemory.context;
+    this.text = formatedMemory.text
   }
 }

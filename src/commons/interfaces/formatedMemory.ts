@@ -5,6 +5,7 @@ export type IFormatedMemoryRaw = {
   title: string;
   sumary: string;
   context: string;
+  text: string;
 }
 
 export type IFormatedMemory = IFormatedMemoryRaw & IObjectRaw
