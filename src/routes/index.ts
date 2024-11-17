@@ -12,5 +12,8 @@ router.use('/formatedMemories', formatedMemoryRouter);
 import configRouter from './config';
 router.use('/configs', configRouter);
 
+import smsRouter from './sms';
+router.use('/smss', smsRouter);
+
 export default router;
 
