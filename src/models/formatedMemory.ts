@@ -5,19 +5,28 @@ import { FormatedMemory } from '../classes/formatedMemory';
 const FormatedMemorySchema = new Schema({
   keyWords: {
     type: [String],
-    required: true,
+    required: false,
   },
   title: {
     type: String,
-    required: true,
+    required: false,
   },
   sumary: {
     type: String,
-    required: true,
+    required: false,
   },
   context: {
     type: String,
+    required: false,
+  },
+  text: {
+    type: String,
     required: true,
+  },
+  embeddings: {
+    type: [String],
+    required: false,
+    default: [],
   },
 });
 
