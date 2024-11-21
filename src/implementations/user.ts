@@ -10,7 +10,7 @@ import authentication from '../services/authentication';
 import jwt from 'jsonwebtoken';
 import dot from 'dot-object';
 
-function setInsensitiveCase (key: string): string{
+function setInsensitiveCase(key: string): string {
   const insensitiveCaseEmail = key.toLowerCase();
   key = insensitiveCaseEmail;
   return key;
@@ -32,25 +32,25 @@ class UserServiceClass extends UserServiceBase {
       'status.deletedAt': null,
       'status.deactivatedAt': null
     };
-    if(company) mongoQuery.company = company;
+    if (company) mongoQuery.company = company;
 
-    if(search){
+    if (search) {
       mongoQuery.$or = [
-        {email: {$regex: search, $options: 'i' }},
-        {firstName: {$regex: search, $options: 'i' }},
-        {lastName: {$regex: search, $options: 'i' }}
+        { email: { $regex: search, $options: 'i' } },
+        { firstName: { $regex: search, $options: 'i' } },
+        { lastName: { $regex: search, $options: 'i' } }
       ];
     }
     const skip = (page - 1) * pageSize;
-    const users = await UserModel.find(mongoQuery).populate('company').skip(skip).limit(pageSize).sort({_id: -1}).exec();
+    const users = await UserModel.find(mongoQuery).populate('company').skip(skip).limit(pageSize).sort({ _id: -1 }).exec();
 
-    return {results: users, total: await UserModel.countDocuments(mongoQuery)};
+    return { results: users, total: await UserModel.countDocuments(mongoQuery) };
   }
 
   async getById(id: string): Promise<IGetByIdResponse> {
 
     const user = (await UserModel.findById(id).populate('company').lean().exec());
-    if(!user) throw new CustomError('Usuário não encontrado.', 404);
+    if (!user) throw new CustomError('Usuário não encontrado.', 404);
 
     return user;
   }
@@ -59,7 +59,7 @@ class UserServiceClass extends UserServiceBase {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      const user: User = new User({...data});
+      const user: User = new User({ ...data });
 
       const created = (await UserModel.create([user], { session }))[0].toObject() as User;
       created.password = undefined;
@@ -70,70 +70,70 @@ class UserServiceClass extends UserServiceBase {
     } catch (error: Error | unknown) {
       await session.abortTransaction();
       throw error;
-    } finally{
+    } finally {
       session.endSession();
     }
   }
 
   async createMe(data: Omit<ICreateBody, 'permissions' | 'type'>): Promise<ICreateResponse> {
-    const user = new User({...data, email: setInsensitiveCase(data.email), type: UserType.USER});
+    const user = new User({ ...data, email: setInsensitiveCase(data.email), type: UserType.USER });
     const created = (await UserModel.create(user)).populate('company');
 
     return created;
   }
 
   async update(id: string, data: IUpdateBody): Promise<IUpdateResponse> {
-    const updated = (await UserModel.findByIdAndUpdate(id, { $set: {...data} }, { new: true}).exec());
-    if(!updated) throw new CustomError('Usuário não encontrado.', 404);
+    const updated = (await UserModel.findByIdAndUpdate(id, { $set: { ...data } }, { new: true }).exec());
+    if (!updated) throw new CustomError('Usuário não encontrado.', 404);
 
     return updated;
   }
 
   async updateMe(data: IUpdateBody): Promise<IUpdateResponse> {
-    if(data.password) data.password = await bcrypt.hash(data.password, 10);
-    const updated = (await UserModel.findByIdAndUpdate(this.authUser, { $set: {...data} }, { new: true}).exec());
-    if(!updated) throw new CustomError('Usuário não encontrado.', 404);
+    if (data.password) data.password = await bcrypt.hash(data.password, 10);
+    const updated = (await UserModel.findByIdAndUpdate(this.authUser, { $set: { ...data } }, { new: true }).exec());
+    if (!updated) throw new CustomError('Usuário não encontrado.', 404);
 
     return updated;
   }
 
   async patch(id: string, data: IUpdateBody): Promise<IUpdateResponse> {
-    const updated = (await UserModel.findByIdAndUpdate(id, { $set: {...dot.dot(data)} }, { upsert: true}).exec());
-    if(!updated) throw new CustomError('Usuário não encontrado.', 404);
+    const updated = (await UserModel.findByIdAndUpdate(id, { $set: { ...dot.dot(data) } }, { upsert: true }).exec());
+    if (!updated) throw new CustomError('Usuário não encontrado.', 404);
 
     return updated;
   }
 
   async patchMe(data: IUpdateBody): Promise<IUpdateResponse> {
-    if(data.password) data.password = await bcrypt.hash(data.password, 10);
-    const updated = (await UserModel.findByIdAndUpdate(this.authUser, { $set: {...dot.dot(data)} }, { upsert: true}).exec());
-    if(!updated) throw new CustomError('Usuário não encontrado.', 404);
+    if (data.password) data.password = await bcrypt.hash(data.password, 10);
+    const updated = (await UserModel.findByIdAndUpdate(this.authUser, { $set: { ...dot.dot(data) } }, { upsert: true }).exec());
+    if (!updated) throw new CustomError('Usuário não encontrado.', 404);
 
     return updated;
   }
 
   async delete(id: string): Promise<void> {
-    const deleted = await UserModel.findByIdAndUpdate(id, { $set: {'status.deletedAt': new Date()} }, { new: true}).exec();
-    if(!deleted) throw new CustomError('Usuário não encontrado.', 404);
+    const deleted = await UserModel.findByIdAndUpdate(id, { $set: { 'status.deletedAt': new Date() } }, { new: true }).exec();
+    if (!deleted) throw new CustomError('Usuário não encontrado.', 404);
   }
 
   async deleteMe(): Promise<void> {
-    const deleted = await UserModel.findByIdAndUpdate(this.authUser, { $set: {'status.deletedAt': new Date(), cpf: '00000000000', email: 'deletado@deletado.deletado', firstName: 'Usuário removido', lastName: '.'} }, { new: true}).exec();
-    if(!deleted) throw new CustomError('Usuário não encontrado.', 404);
+    const deleted = await UserModel.findByIdAndUpdate(this.authUser, { $set: { 'status.deletedAt': new Date(), cpf: '00000000000', email: 'deletado@deletado.deletado', firstName: 'Usuário removido', lastName: '.' } }, { new: true }).exec();
+    if (!deleted) throw new CustomError('Usuário não encontrado.', 404);
   }
 
   async activate(id: string, activate: boolean): Promise<IUpdateResponse> {
     let updated: User | null;
-    if(activate) updated = (await UserModel.findByIdAndUpdate(id, { $set: {'status.deactivatedAt': null} }, { new: true}).exec());
-    else updated = (await UserModel.findByIdAndUpdate(id, { $set: {'status.deactivatedAt': new Date()}}, { new: true}).exec());
+    if (activate) updated = (await UserModel.findByIdAndUpdate(id, { $set: { 'status.deactivatedAt': null } }, { new: true }).exec());
+    else updated = (await UserModel.findByIdAndUpdate(id, { $set: { 'status.deactivatedAt': new Date() } }, { new: true }).exec());
 
-    if(!updated) throw new CustomError('Usuário não encontrado.', 404);
+    if (!updated) throw new CustomError('Usuário não encontrado.', 404);
 
     return updated;
   }
 
   async login(authorization: string, ip?: string): Promise<AuthUser> {
-    if(!ip) throw new CustomError('IP não encontrado', 400);
+    if (!ip) throw new CustomError('IP não encontrado', 400);
     const user = await authentication.auth(authorization, ip) as AuthUser;
     user.password = undefined;
     return user;
@@ -146,7 +146,7 @@ class UserServiceClass extends UserServiceBase {
     };
 
     const user = await UserModel.findOne(query);
-    if(!user) throw new CustomError('Usuário não encontrado.', 404);
+    if (!user) throw new CustomError('Usuário não encontrado.', 404);
 
     const decodedEmail = decodeURI(user.email);
 
@@ -154,11 +154,11 @@ class UserServiceClass extends UserServiceBase {
   }
 
   async passwordDefinition({ password, token }: IPasswordDefinitionBody): Promise<void> {
-    const {email} = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { email: string };
-    const user = await UserModel.findOneAndUpdate({'status.deletedAt': null, email: email}, {password: await bcrypt.hash(password, 10)},{new: true}).exec();
-    if(!user?.password) user?.updateOne({'status.emailValidatedAt': new Date()}, {new: true}).exec();
+    const { email } = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { email: string };
+    const user = await UserModel.findOneAndUpdate({ 'status.deletedAt': null, email: email }, { password: await bcrypt.hash(password, 10) }, { new: true }).exec();
+    if (!user?.password) user?.updateOne({ 'status.emailValidatedAt': new Date() }, { new: true }).exec();
 
-    if(!user) throw new CustomError('Usuário não encontrado.', 404);
+    if (!user) throw new CustomError('Usuário não encontrado.', 404);
   }
 
   async emailValidationRequest({ email }: IEmailValidationRequestBody): Promise<void> {
@@ -169,7 +169,7 @@ class UserServiceClass extends UserServiceBase {
     query.email = email;
 
     const user = await UserModel.findOne(query);
-    if(!user) throw new CustomError('Usuário não encontrado.', 404);
+    if (!user) throw new CustomError('Usuário não encontrado.', 404);
 
     const decodedEmail = decodeURI(user.email);
 
@@ -177,10 +177,10 @@ class UserServiceClass extends UserServiceBase {
   }
 
   async emailValidation({ token }: IEmailValidationBody): Promise<void> {
-    const {email} = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { email: string };
-    const user = await UserModel.findOneAndUpdate({email: email, 'status.deletedAt': null}, {'status.emailValidatedAt': new Date()}, {new: true}).exec();
+    const { email } = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { email: string };
+    const user = await UserModel.findOneAndUpdate({ email: email, 'status.deletedAt': null }, { 'status.emailValidatedAt': new Date() }, { new: true }).exec();
 
-    if(!user) throw new CustomError('Usuário não encontrado.', 404);
+    if (!user) throw new CustomError('Usuário não encontrado.', 404);
   }
 
 }

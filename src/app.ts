@@ -8,11 +8,11 @@ import { celebrateErrorHandler } from './validators/errors';
 import { errorHandler } from './services/errorHandler';
 import database from './services/database';
 import { User } from './classes/user';
-import { Document } from './classes/document';
+import { File } from './classes/file';
 
 import { UserType } from './commons/interfaces/user';
 import { UserModel } from './models/user';
-import { DocumentModel } from './models/document';
+import { FileModel } from './models/file';
 
 //* EXPRESS
 const app: express.Express = express();
@@ -71,9 +71,9 @@ app.use(errorHandler);
 
 setTimeout(async () => {
   database.connect()
-  .then(() => {
-    console.log('Database connected');
-  })
+    .then(() => {
+      console.log('Database connected');
+    })
 
   // const user = new User({
   //   firstName: 'Admin',
@@ -86,6 +86,6 @@ setTimeout(async () => {
 
   // await UserModel.create(user);
 
-} , 1000);
+}, 1000);
 
 export default app;
