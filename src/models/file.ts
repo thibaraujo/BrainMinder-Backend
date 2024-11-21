@@ -15,6 +15,9 @@ const FileSchema = new Schema({
     type: Number,
     required: true,
   },
+  url: {
+    type: String,
+  },
 });
 
 database.setupSchema(FileSchema);
