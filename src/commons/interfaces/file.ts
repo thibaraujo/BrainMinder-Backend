@@ -1,9 +1,9 @@
 import { IObjectRaw } from "./base";
 
-export type IDocumentRaw = {
+export type IFileRaw = {
   name: string;
   extension: string;
   length: number;
 }
 
-export type IDocument = IDocumentRaw & IObjectRaw
+export type IFile = IFileRaw & IObjectRaw

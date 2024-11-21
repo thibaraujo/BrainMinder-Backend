@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
 import database from '../services/database';
-import { Document } from 'mongodb';
+import { File } from 'mongodb';
 
-const DocumentSchema = new Schema({
+const FileSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -17,7 +17,7 @@ const DocumentSchema = new Schema({
   },
 });
 
-database.setupSchema(DocumentSchema);
+database.setupSchema(FileSchema);
 
-export const DocumentModel = model<Document>('Document', DocumentSchema);
+export const FileModel = model<File>('File', FileSchema);
 
