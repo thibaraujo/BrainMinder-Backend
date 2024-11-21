@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import database from '../services/database';
-import { File } from 'mongodb';
+import { File } from '../classes/file';
 
 const FileSchema = new Schema({
   name: {
