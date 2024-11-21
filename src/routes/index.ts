@@ -15,5 +15,8 @@ router.use('/configs', configRouter);
 import smsRouter from './sms';
 router.use('/smss', smsRouter);
 
+import emailRouter from './email';
+router.use('/emails', emailRouter);
+
 export default router;
 
