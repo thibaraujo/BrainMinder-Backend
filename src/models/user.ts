@@ -69,49 +69,49 @@ UserSchema.pre('save', async function (next) {
   return next();
 });
 
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("cpf")) return next();
-  const path = "./customer-master-key.txt";
-  const fs = require("fs");
-  const localMasterKey = fs.readFileSync(path);
-  const kmsProviders = {
-    local: {
-      key: localMasterKey,
-    },
-  };
+// UserSchema.pre("save", async function (next) {
+//   if (!this.isModified("cpf")) return next();
+//   const path = "./customer-master-key.txt";
+//   const fs = require("fs");
+//   const localMasterKey = fs.readFileSync(path);
+//   const kmsProviders = {
+//     local: {
+//       key: localMasterKey,
+//     },
+//   };
 
-  const user = process.env.DATABASE_USER;
-  const password = process.env.DATABASE_PASSWORD;
-  const databaseName = process.env.DATABASE_NAME;
-  const host = process.env.DATABASE_HOST;
+//   const user = process.env.DATABASE_USER;
+//   const password = process.env.DATABASE_PASSWORD;
+//   const databaseName = process.env.DATABASE_NAME;
+//   const host = process.env.DATABASE_HOST;
 
-  const uri = `mongodb+srv://${user}:${password}@${host}/${databaseName}?retryWrites=true&w=majority`;
-  const keyVaultDatabaseName = "encryption";
-  const keyVaultCollectionName = "__keyVault";
-  const keyVaultNamespace = `${keyVaultDatabaseName}.${keyVaultCollectionName}`;
+//   const uri = `mongodb+srv://${user}:${password}@${host}/${databaseName}?retryWrites=true&w=majority`;
+//   const keyVaultDatabaseName = "encryption";
+//   const keyVaultCollectionName = "__keyVault";
+//   const keyVaultNamespace = `${keyVaultDatabaseName}.${keyVaultCollectionName}`;
 
-  try {
-    const client = new MongoClient(uri);
-    const encryption = new ClientEncryption(client, {
-      keyVaultNamespace,
-      kmsProviders
-    });
-    const keyId = await encryption.createDataKey("local");
-    console.log("DataKey criado com ID:", keyId.toString("base64"));
+//   try {
+//     const client = new MongoClient(uri);
+//     const encryption = new ClientEncryption(client, {
+//       keyVaultNamespace,
+//       kmsProviders
+//     });
+//     const keyId = await encryption.createDataKey("local");
+//     console.log("DataKey criado com ID:", keyId.toString("base64"));
 
-    this.cpf = await encryption.encrypt(this.cpf, {
-      algorithm: "AEAD_AES_256_CBC_HMAC_SHA_512-Random",
-      // AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic
-      keyId: keyId
-    });
+//     this.cpf = await encryption.encrypt(this.cpf, {
+//       algorithm: "AEAD_AES_256_CBC_HMAC_SHA_512-Random",
+//       // AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic
+//       keyId: keyId
+//     });
 
-    console.log("Campo criptografado:", this.cpf);
-    const decryptedField = await encryption.decrypt(this.cpf);
-    console.log("Campo descriptografado:", decryptedField);
-    next();
-  } catch (err) {
-    console.error(err);
-  }
-});
+//     console.log("Campo criptografado:", this.cpf);
+//     const decryptedField = await encryption.decrypt(this.cpf);
+//     console.log("Campo descriptografado:", decryptedField);
+//     next();
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
 
 export const UserModel = model<User>('User', UserSchema);
