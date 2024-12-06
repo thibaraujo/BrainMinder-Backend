@@ -26,13 +26,12 @@ class UserServiceClass extends UserServiceBase {
   authUser?: User;
 
   async get(query: IGetQuery): Promise<IGetResponse> {
-    const { page = 1, pageSize = 10, search, company }: IGetQuery = query;
+    const { page = 1, pageSize = 10, search }: IGetQuery = query;
 
     const mongoQuery: mongoose.FilterQuery<User> = {
       'status.deletedAt': null,
       'status.deactivatedAt': null
     };
-    if (company) mongoQuery.company = company;
 
     if (search) {
       mongoQuery.$or = [
@@ -42,14 +41,14 @@ class UserServiceClass extends UserServiceBase {
       ];
     }
     const skip = (page - 1) * pageSize;
-    const users = await UserModel.find(mongoQuery).populate('company').skip(skip).limit(pageSize).sort({ _id: -1 }).exec();
+    const users = await UserModel.find(mongoQuery).skip(skip).limit(pageSize).sort({ _id: -1 }).exec();
 
     return { results: users, total: await UserModel.countDocuments(mongoQuery) };
   }
 
   async getById(id: string): Promise<IGetByIdResponse> {
 
-    const user = (await UserModel.findById(id).populate('company').lean().exec());
+    const user = (await UserModel.findById(id).lean().exec());
     if (!user) throw new CustomError('Usuário não encontrado.', 404);
 
     return user;
