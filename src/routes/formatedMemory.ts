@@ -10,22 +10,22 @@ import validate from '../services/validator';
 const router = Router();
 
 //* Cadastro de usuário (Admin)
-router.post('/', [validate(FormatedMemoryValidator.create), authentication.adminMiddleware], FormatedMemoryController.create);
+router.post('/', [validate(FormatedMemoryValidator.create)], FormatedMemoryController.create);
 
 //* Listagem e busca de usuários
-router.get('/', [validate(FormatedMemoryValidator.get), authentication.userMiddleware], (req: AuthRequest, res: Response, next: NextFunction) => {
+router.get('/', [validate(FormatedMemoryValidator.get)], (req: AuthRequest, res: Response, next: NextFunction) => {
   if (req.query.id) return FormatedMemoryController.read(req, res, next);
   return FormatedMemoryController.list(req, res, next);
 });
 
 //* Remoção de usuário
-router.delete('/', [validate(FormatedMemoryValidator.delete), authentication.adminMiddleware], FormatedMemoryController.delete);
+router.delete('/', [validate(FormatedMemoryValidator.delete)], FormatedMemoryController.delete);
 
 //* Edição de usuário
-router.put('/', [validate(FormatedMemoryValidator.update), authentication.adminMiddleware], FormatedMemoryController.update);
+router.put('/', [validate(FormatedMemoryValidator.update)], FormatedMemoryController.update);
 
 //* Ativar e Desativar usuário
-router.put('/activate', [validate(FormatedMemoryValidator.activate), authentication.adminMiddleware], FormatedMemoryController.activate);
+router.put('/activate', [validate(FormatedMemoryValidator.activate)], FormatedMemoryController.activate);
 
 
 export default router;
